@@ -90,6 +90,7 @@ public class AddressBook {
     private static final String MESSAGE_STORAGE_FILE_CREATED = "Created new empty storage file: %1$s";
     private static final String MESSAGE_WELCOME = "Welcome to your Address Book!";
     private static final String MESSAGE_USING_DEFAULT_FILE = "Using default storage file : " + DEFAULT_STORAGE_FILEPATH;
+    private static final String MESSAGE_COUNTED = "Total number of persons in your address book is: %1$s";
 
     // These are the prefix strings to define the data type of a command parameter
     private static final String PERSON_DATA_PREFIX_PHONE = "p/";
@@ -133,6 +134,10 @@ public class AddressBook {
     private static final String COMMAND_EXIT_DESC = "Exits the program.";
     private static final String COMMAND_EXIT_EXAMPLE = COMMAND_EXIT_WORD;
 
+    private static final String COMMAND_COUNT_WORD = "count";
+    private static final String COMMAND_COUNT_DESC = "Counts the total number of persons in your address book.";
+    private static final String COMMAND_COUNT_EXAMPLE = COMMAND_COUNT_WORD;
+
     private static final String DIVIDER = "===================================================";
 
 
@@ -144,6 +149,11 @@ public class AddressBook {
     private static final int PERSON_DATA_INDEX_NAME = 0;
     private static final int PERSON_DATA_INDEX_PHONE = 1;
     private static final int PERSON_DATA_INDEX_EMAIL = 2;
+
+    /**
+     * Keeps track of number of persons in the address book.
+     */
+    private static int noOfPersons = 0;
 
     /**
      * The number of data elements for a single person.
@@ -383,6 +393,8 @@ public class AddressBook {
             return getUsageInfoForAllCommands();
         case COMMAND_EXIT_WORD:
             executeExitProgramRequest();
+        case COMMAND_COUNT_WORD:
+            return getCount();
         default:
             return getMessageForInvalidCommandInput(commandType, getUsageInfoForAllCommands());
         }
@@ -566,6 +578,15 @@ public class AddressBook {
     private static String executeClearAddressBook() {
         clearAddressBook();
         return MESSAGE_ADDRESSBOOK_CLEARED;
+    }
+
+    /**
+     * Displays the number of persons in the address book to the user.
+     *
+     * @return feedback display message for the operation result
+     */
+    private static String getCount() {
+        return String.format(MESSAGE_COUNTED, noOfPersons);
     }
 
     /**
@@ -784,6 +805,7 @@ public class AddressBook {
      */
     private static void addPersonToAddressBook(String[] person) {
         ALL_PERSONS.add(person);
+        noOfPersons++;
         savePersonsToFile(getAllPersonsInAddressBook(), storageFilePath);
     }
 
@@ -796,6 +818,7 @@ public class AddressBook {
     private static boolean deletePersonFromAddressBook(String[] exactPerson) {
         final boolean changed = ALL_PERSONS.remove(exactPerson);
         if (changed) {
+            noOfPersons--;
             savePersonsToFile(getAllPersonsInAddressBook(), storageFilePath);
         }
         return changed;
@@ -813,6 +836,7 @@ public class AddressBook {
      */
     private static void clearAddressBook() {
         ALL_PERSONS.clear();
+        noOfPersons = 0;
         savePersonsToFile(getAllPersonsInAddressBook(), storageFilePath);
     }
 
@@ -823,9 +847,10 @@ public class AddressBook {
      */
     private static void initialiseAddressBookModel(ArrayList<String[]> persons) {
         ALL_PERSONS.clear();
+        noOfPersons = 0;
         ALL_PERSONS.addAll(persons);
+        noOfPersons += persons.size();
     }
-
 
     /*
      * ===========================================
@@ -1088,7 +1113,8 @@ public class AddressBook {
                 + getUsageInfoForDeleteCommand() + LS
                 + getUsageInfoForClearCommand() + LS
                 + getUsageInfoForExitCommand() + LS
-                + getUsageInfoForHelpCommand();
+                + getUsageInfoForHelpCommand() + LS
+                + getUsageInfoForCountCommand();
     }
 
     /** Returns the string for showing 'add' command usage instruction */
@@ -1136,6 +1162,11 @@ public class AddressBook {
                 + String.format(MESSAGE_COMMAND_HELP_EXAMPLE, COMMAND_EXIT_EXAMPLE);
     }
 
+    /** Returns the string for showing 'count' command usage instruction */
+    private static String getUsageInfoForCountCommand() {
+        return String.format(MESSAGE_COMMAND_HELP, COMMAND_COUNT_WORD, COMMAND_COUNT_DESC)
+                + String.format(MESSAGE_COMMAND_HELP_EXAMPLE, COMMAND_COUNT_EXAMPLE);
+    }
 
     /*
      * ============================
