@@ -176,7 +176,7 @@
 || Total number of persons in your address book is: 5
 || ===================================================
 || Enter command: || [Command entered:  find]
-|| 
+||
 || 0 persons found!
 || ===================================================
 || Enter command: || [Command entered:  find bet]
