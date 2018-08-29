@@ -71,6 +71,7 @@
 || 
 || exit: Exits the program.	Example: exit
 || help: Shows program usage instructions.	Example: help
+|| count: Counts the total number of persons in your address book.	Example: count
 || ===================================================
 || Enter command: || [Command entered:  clear]
 || Address book has been cleared!
@@ -170,6 +171,9 @@
 || 	5. Esther Potato  Phone Number: 555555  Email: esther@notreal.potato
 || 
 || 5 persons found!
+|| ===================================================
+|| Enter command: || [Command entered:  count]
+|| Total number of persons in your address book is: 5
 || ===================================================
 || Enter command: || [Command entered:  find]
 || 
